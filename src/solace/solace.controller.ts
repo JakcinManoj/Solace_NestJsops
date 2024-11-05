@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { SolaceService } from './solace.service';
 
@@ -22,6 +23,4 @@ export class SolaceController {
     await this.solaceService.deleteMessage();
     return { message: 'Unsubscribed from topic successfully' };
   }
-
-  // Implement other CRUD endpoints as needed
 }

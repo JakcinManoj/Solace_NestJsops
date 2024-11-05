@@ -1,10 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import * as solace from 'solclientjs';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 @Injectable()
 export class SolaceService implements OnModuleInit, OnModuleDestroy {
   private session: any;
-  private topic: string = 'your/topic'; // Update with your desired topic
+  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
+  private topic: string = 'your/topic';
 
   onModuleInit() {
     this.connect();
@@ -15,10 +19,10 @@ export class SolaceService implements OnModuleInit, OnModuleDestroy {
     factory.init();
 
     this.session = factory.createSession({
-      url: "wss://mr-connection-zxcgejfvn8p.messaging.solace.cloud:443",
-      vpnName: "demo",
-      userName: "solace-cloud-client",
-      password: "smgg04sv9dr0fna2kb2asqvme8"
+      url: process.env.URL,
+      vpnName: process.env.VPN_NAME,
+      userName: process.env.USER_NAME,
+      password: process.env.PASSWD
     });
 
     try {
@@ -41,14 +45,14 @@ export class SolaceService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  // Other CRUD methods like subscribeMessage, deleteMessage can be added similarly
-
   async subscribeMessage() {
     try {
       this.session.subscribe({
         topic: this.topic,
         qos: 1,
       });
+      console.log("the topic is............ :",this.topic);
+      
       console.log('Subscribed to topic:', this.topic);
     } catch (error) {
       console.error('Error subscribing to topic:', error);
